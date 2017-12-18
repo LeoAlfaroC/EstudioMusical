@@ -1,0 +1,37 @@
+Hola Leonardo,
+
+Según lo conversado, te hago llegar la prueba técnica por parte del Team PHP.
+
+
+La prueba técnica consiste en realizar una aplicación web usando Laravel que permita la administración de un estudio musical y debe contar con lo siguiente:
+
+Front-end:
+-Una página que muestre toda la información del estudio:
+-Menú superior con los ítems: Inicio, Eventos.
+-Banner superior (con 3 imágenes random y un texto 'Reserva sala' en las imágenes)
+-Una lista de eventos (los últimos 4 creados)
+-La idea es que al seleccionar un ítem del menu, se muestre la sección en la misma página mediante un efecto (ejemplo:http://tinyastro.co/)
+
+El flujo inicia al dar click al texto del banner, el cual redirigirá a una página nueva para comenzar la reserva.
+En primer lugar, habrá un selector para buscar que te permita escoger el horario en el que deseas reservar la sala. Al realizar la búsqueda, se mostrará una tabla que contenga las salas libres para el horario buscado.
+Al seleccionar la sala se procederá a seleccionar la lista de instrumentos disponibles que serán usados en la sala.
+Al continuar se llenan los datos personales: nombre, correo, teléfono.
+Al terminar la reserva debería enviar un email confirmando la reserva y mostrar un mensaje de gracias en la web.
+Para el realizar el proceso de reserva será necesario que el cliente esté autenticado en el sistema.
+
+Backend:
+-Una página que liste clientes precargados
+-Una página que liste instrumentos precargados
+-Una página que liste salas de ensayo precargados
+(Estas 3 listas con acciones: ver, editar)
+
+Consideraciones:
+-Debes incluir data de prueba para el despliegue inicial para la revisión.
+-El límite para la cantidad de personas es hasta 10 y en instrumentos hasta 20.
+-La estructura de datos queda totalmente a tu criterio.
+-La prueba debe ser desarrollada usando MySQL como DBMS.
+-Usar Git como SCM. Pueden utilizar un repositorio gratuito de Github/GitLab/Bitbucket o el que sea de tu preferencia.
+-Recomendamos hacerlo en el entorno de Linux (Ubuntu o Linux Mint), si se usa cualquier otro SO, recomendamos usar una maquina virtual o la herramienta de tu preferencia.
+
+La fecha de entrega será miércoles 20 de diciembre a las 3pm, enviar confirmación.
+Cualquier pregunta, no dudes en escribirnos.
