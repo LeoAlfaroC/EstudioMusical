@@ -87,6 +87,12 @@
 								<a href="{{ route('home') }}">Mis reservas</a>
 							</li>
 							<li role="separator" class="divider"></li>
+							@if(Auth::user()->is_admin)
+							<li>
+								<a href="{{ route('clients') }}">Administración</a>
+							</li>
+							<li role="separator" class="divider"></li>
+							@endif
 							<li>
 
 								<a href="{{ route('logout') }}" onclick="event.preventDefault();

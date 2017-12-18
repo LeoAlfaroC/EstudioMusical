@@ -9,7 +9,6 @@ use App\Models\Instrument;
 use App\Models\Room;
 use Carbon\Carbon;
 use Auth;
-use DB;
 
 class ReservationController extends Controller
 {

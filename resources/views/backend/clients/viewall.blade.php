@@ -10,6 +10,7 @@
 		Tus cambios se guardaron correctamente.
 	</div>
 	@endif
+	<h1>Clientes</h1>
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>

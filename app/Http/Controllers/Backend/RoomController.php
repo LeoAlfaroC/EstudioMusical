@@ -32,9 +32,7 @@ class RoomController extends Controller
     public function save(Request $request)
     {
         $room = Room::find($request->room_id);
-        $room->name = $request->name;
-        $room->email = $request->email;
-        $room->phone = $request->phone;
+        $room->room_number = $request->room_number;
 
         $room->save();
 

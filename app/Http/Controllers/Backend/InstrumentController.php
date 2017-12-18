@@ -31,13 +31,11 @@ class InstrumentController extends Controller
 
     public function save(Request $request)
     {
-        $instrument = Instrument::find($request->client_id);
-        $instrument->name = $request->name;
-        $instrument->email = $request->email;
-        $instrument->phone = $request->phone;
+        $instrument = Instrument::find($request->instrument_id);
+        $instrument->description = $request->description;
 
         $instrument->save();
 
-        return redirect(route('instrument'))->with('saved', true);
+        return redirect(route('instruments'))->with('saved', true);
     }
 }
