@@ -6,7 +6,7 @@
 		<div class="col-md-12">
 		<h1>Salas disponibles</h1>
 			@if($rooms->isEmpty())
-				No hay Salas disponibles :(
+				No hay salas disponibles :(
 			@else
 			<table class="table">
 			<tbody>

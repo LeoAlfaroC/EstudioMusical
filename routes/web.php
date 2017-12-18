@@ -20,6 +20,8 @@ Route::get('/home', 'HomeController@home')->name('home');
 Route::get('/reserve', 'ReservationController@create')->name('reserve');
 Route::get('/search', 'ReservationController@search')->name('reserve_search');
 Route::post('/save', 'ReservationController@save')->name('reserve_save');
+Route::get('/choose', 'ReservationController@choose')->name('reserve_choose');
+Route::post('/save_instruments', 'ReservationController@save_instruments')->name('reserve_save_instruments');
 
 Route::middleware(['auth', 'IsAdmin'])->prefix('dashboard')->group(function() {
     Route::prefix('clients')->group(function() {

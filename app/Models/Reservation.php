@@ -15,4 +15,9 @@ class Reservation extends Model
     {
         return $this->belongsTo('App\Models\Room');
     }
+
+    public function details()
+    {
+        return $this->hasMany('App\Models\ReservationDetails');
+    }
 }

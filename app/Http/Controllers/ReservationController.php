@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ReservationDetails;
 use App\Models\Reservation;
+use App\Models\Instrument;
 use App\Models\Room;
 use Carbon\Carbon;
 use Auth;
+use DB;
 
 class ReservationController extends Controller
 {
@@ -40,6 +43,7 @@ class ReservationController extends Controller
 
         $desired_hour = Carbon::parse($request->hour);
 
+        // Calculates the room's available hours with the desired hour and the starting hour of the room's next reservation (if there's none, it'll use the closing time -set in the env file- of the studio)
         foreach($available_rooms as $room)
         {
             if($room->reservations->count() == 0)
@@ -73,6 +77,35 @@ class ReservationController extends Controller
 
         $new_reservation->save();
 
-        return redirect('home')->with('saved', true);
+        session(['reservation_id' => $new_reservation->id]);
+
+        return redirect(route('reserve_choose'))->with('reserve_saved', true);
+    }
+
+    public function choose(Request $request)
+    {
+        $intruments = Instrument::whereDoesntHave('reservations', function ($query) {
+            $query->whereHas('parent', function ($query) {
+                $query->where('day', session()->get('day'))
+                ->whereRaw('CAST(? AS TIME) BETWEEN from_hour AND ADDTIME(from_hour, SEC_TO_TIME((duration*3600)-1))', [session()->get('hour')]);
+            });
+        })->get();
+
+        return view('reservations.instruments')->with('intruments', $intruments);
+    }
+
+    public function save_instruments(Request $request)
+    {
+        // TO-DO: Put inside transaction
+        foreach($request->instruments as $instrument)
+        {
+            $new_detail = new ReservationDetails();
+            $new_detail->reservation_id = session()->get('reservation_id');
+            $new_detail->instrument_id = $instrument;
+
+            $new_detail->save();
+        }
+
+        return redirect(route('home'))->with('reserve_saved', true);        
     }
 }
