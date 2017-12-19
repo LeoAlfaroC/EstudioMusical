@@ -106,20 +106,45 @@
 		</div>
 	</div>
 </div>
-<div class="container" id="events">
+<div class="container">
 	<div class="row">
 		<div class="col-md-12">
-
+            <h1>¿Quienes somos?</h1>
+            <p class="lead">
+            Somos una empresa con más de diez años en la industria de la música. Nuestros estudios de grabación cuentan con los mejores equipos e instrumentos del país.
+            </p>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" id="events">
 		<div class="col-md-12">
 			<h1>Eventos</h1>
+            <p class="lead">
+            Estos son eventos registrados recientemente en {{ config('app.name') }}.
+            </p>
 			@foreach($events as $event)
-			<h2>{{ $event->room->room_number }}</h2>
-			<p>Día: {{ \Carbon\Carbon::parse($event->day)->format('d/m/Y') }}</p>
-			<p>Hora: {{ \Carbon\Carbon::parse($event->from_hour)->format('h:i A') }}</p>
-			<p>Reservado por: {{ $event->user->name }}</p>
+            <div class="media">
+                @if($loop->iteration % 2 != 0)
+                <div class="media-left">
+                    <img class="media-object img-thumbnail" src="{{ asset('storage/rooms/' . $event->room->image_path) }}" alt="{{ $event->room->room_number }}" style="max-height: 200px;">
+                </div>
+                @endif
+                <div class="media-body {{ $loop->iteration % 2 != 0 ? 'text-right' : ''}}">
+                    <h2 class="media-heading text-primary">Sala {{ $event->room->room_number }}</h2>
+                    <h4><strong>Día:</strong> {{ \Carbon\Carbon::parse($event->day)->format('d/m/Y') }}</h4>
+                    <h4><strong>Hora:</strong> {{ \Carbon\Carbon::parse($event->from_hour)->format('h:i A') }}</h4>
+                    <h4><strong>Reservado por:</strong> {{ $event->user->name }}</h4>
+                </div>
+                @if($loop->iteration % 2 == 0)
+                <div class="media-right">
+                    <img class="media-object img-thumbnail" src="{{ asset('storage/rooms/' . $event->room->image_path) }}" alt="{{ $event->room->room_number }}" style="max-height: 200px;">
+                </div>
+                @endif
+            </div>
+
+            @if(!$loop->last)
+            <hr>
+            @endif
+
 			@endforeach
 		</div>
 	</div>
@@ -132,16 +157,18 @@
 
 @section('custom_js')
 <script>
-$('a[href*="#inicio"]').on('click',function (e) {
-    e.preventDefault();
+    $(document).ready(function() {      
+        if(window.location.hash && window.location.hash == "#eventos") {
+            $('a[href*="#eventos"]').trigger('click');
+        }
+    });
 
-    $("html, body").animate({ scrollTop: 0 }, "slow");
-});
+    $('a[href*="#inicio"]').on('click',function (e) {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
 
-$('a[href*="#eventos"]').on('click',function (e) {
-    e.preventDefault();
-
-    $("html, body").animate({ scrollTop: document.getElementById('events').offsetTop }, "slow");
-});
+    $('a[href*="#eventos"]').on('click',function (e) {
+        $("html, body").animate({ scrollTop: document.getElementById('events').offsetTop - document.getElementById('topmenu').offsetHeight }, "slow");
+    });
 </script>
 @endsection
