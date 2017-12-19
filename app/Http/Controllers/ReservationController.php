@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Models\ReservationDetails;
+use App\Mail\ReservationCreated;
 use App\Models\Reservation;
 use App\Models\Instrument;
 use App\Models\Room;
@@ -12,11 +14,6 @@ use Auth;
 
 class ReservationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function create()
     {
         return view('reservations.create');
@@ -68,11 +65,12 @@ class ReservationController extends Controller
     {
         $new_reservation = new Reservation();
 
-        $new_reservation->user_id = Auth::user()->id;
+        $new_reservation->user_id = Auth::check() ? Auth::user()->id : null;
         $new_reservation->room_id = $request->room_id;
         $new_reservation->day = session()->get('day');
         $new_reservation->from_hour = session()->get('hour');
         $new_reservation->duration = $request->duration;
+        $new_reservation->confirmed = false;
 
         $new_reservation->save();
 
@@ -95,16 +93,40 @@ class ReservationController extends Controller
 
     public function save_instruments(Request $request)
     {
-        // TO-DO: Put inside transaction
-        foreach($request->instruments as $instrument)
+        if(session()->has('reservation_id'))
         {
-            $new_detail = new ReservationDetails();
-            $new_detail->reservation_id = session()->get('reservation_id');
-            $new_detail->instrument_id = $instrument;
+            // TO-DO: Put inside transaction
+            foreach($request->instruments as $instrument)
+            {
+                $new_detail = new ReservationDetails();
+                $new_detail->reservation_id = session()->get('reservation_id');
+                $new_detail->instrument_id = $instrument;
 
-            $new_detail->save();
+                $new_detail->save();
+            }
         }
+   
+        return redirect(route('reserve_complete'));
+    }
 
-        return redirect(route('home'))->with('reserve_saved', true);        
+    public function complete()
+    {
+        if(session()->has('reservation_id'))
+        {
+            // We can safely assume the user has logged in (auth middleware) and proceed to update
+            // their unconfirmed reservation (and send them an email)
+            $reservation = Reservation::withoutGlobalScopes()->find(session()->get('reservation_id'));
+            $reservation->user_id = Auth::user()->id;
+            $reservation->confirmed = true;
+            $reservation->save();
+
+            Mail::to(Auth::user()->email)->send(new ReservationCreated($reservation->load('room')));
+
+            session()->forget('reservation_id');
+
+            return redirect(route('home'))->with('reserve_saved', true);
+        }
+        
+        return redirect(route('home'));
     }
 }

@@ -9,7 +9,7 @@
 					<h1 class="media-heading text-center">Sala {{ $room->room_number }}</h1>
 					<br />
 					<a href="#">
-					<img class="media-object img-thumbnail" src="http://lorempixel.com/750/200" alt="Filler Image By LoremPixel.com">
+					<img class="media-object img-thumbnail" src="{{ asset('storage/rooms/' . $room->image_path) }}" alt="Sala {{ $room->room_number }}" style="max-width: 750px;">
 					</a>
 					<br />
 					<p><strong>Fecha de registro:</strong> {{ \Carbon\Carbon::parse($room->created_at)->format('d/m/Y') }}</p>

@@ -9,7 +9,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                Tu reserva se registró correctamente.
+                Tu reserva se registró correctamente. Dentro de poco te llegará un correo con toda la información necesaria. ¡Gracias por usar nuestro servicio!
             </div>
             @endif
             <div class="panel panel-default">

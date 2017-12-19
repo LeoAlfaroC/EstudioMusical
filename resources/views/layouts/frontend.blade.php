@@ -27,7 +27,7 @@
 
 	<style>
 		body {
-			padding-top: 80px;
+			padding-top: 70px;
 			padding-bottom: 20px;
 		}
 	</style>
@@ -58,10 +58,10 @@
 				<!-- Left Side Of Navbar -->
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">Inicio</a>
+						<a href="/#inicio">Inicio</a>
 					</li>
 					<li>
-						<a href="#">Eventos</a>
+						<a href="/#eventos">Eventos</a>
 					</li>
 				</ul>
 

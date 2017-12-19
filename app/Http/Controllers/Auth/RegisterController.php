@@ -39,6 +39,18 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function redirectTo()
+    {
+        // If there's a reservation id in session, it means a user tried to create one
+        // without having an account / logging in
+        if(session()->has('reservation_id'))
+        {
+            return route('reserve_complete');
+        }
+
+        return route('home');
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -51,6 +63,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'phone' => 'string|min:6',
         ]);
     }
 
@@ -66,6 +79,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
         ]);
     }
 }

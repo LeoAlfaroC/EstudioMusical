@@ -4,6 +4,21 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            @if(session()->has('reservation_id'))
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Falta poco para completar tu reserva. Inicia sesión o <strong><a href="{{ route('register') }}">regístrate aquí</a></strong>, así tu reserva será confirmada.
+            </div>
+            @else
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                ¿No tienes una cuenta? <strong><a href="{{ route('register') }}">Regístrate aquí</a></strong>. ¡Tarda menos de un minuto!
+            </div>
+            @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
 

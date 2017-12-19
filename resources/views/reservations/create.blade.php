@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-6 col-md-offset-3">
 			<form method="GET" ACTION="{{ route('reserve_search') }}">
 				<div class="form-group">
 					<label for="day">¿Qué día?</label>
@@ -13,7 +13,7 @@
 					<label for="hour">¿A qué hora?</label>
 					<input type="time" class="form-control" id="hour" name="hour" step="1800" required>
 				</div>
-				<button type="submit" class="btn btn-default">Buscar salas disponibles</button>
+				<button type="submit" class="btn btn-primary">Buscar salas disponibles</button>
 			</form>
 		</div>
 	</div>

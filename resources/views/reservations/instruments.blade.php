@@ -5,11 +5,11 @@
 	<div class="row">
 		<div class="col-md-12">
 		 @if(session('reserve_saved'))
-		<div class="alert alert-success">
+		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-			Tu reserva se registró correctamente.
+			Tu reserva se registró correctamente. A continuación, elige los instrumentos que necesitarás.
 		</div>
 		@endif
 		<h1>Intrumentos disponibles</h1>
