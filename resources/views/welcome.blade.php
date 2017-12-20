@@ -115,7 +115,7 @@
             </p>
 		</div>
 	</div>
-	<div class="row" id="events">
+	<div class="row" id="eventos">
 		<div class="col-md-12">
 			<h1>Eventos</h1>
             <p class="lead">
@@ -168,7 +168,8 @@
     });
 
     $('a[href*="#eventos"]').on('click',function (e) {
-        $("html, body").animate({ scrollTop: document.getElementById('events').offsetTop - document.getElementById('topmenu').offsetHeight }, "slow");
+		e.preventDefault();
+        $("html, body").animate({ scrollTop: document.getElementById('eventos').offsetTop - document.getElementById('topmenu').offsetHeight }, "slow");
     });
 </script>
 @endsection

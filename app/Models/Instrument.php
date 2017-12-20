@@ -10,4 +10,9 @@ class Instrument extends Model
     {
         return $this->hasMany('App\Models\ReservationDetails');
     }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
 }

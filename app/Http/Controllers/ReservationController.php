@@ -8,9 +8,11 @@ use App\Models\ReservationDetails;
 use App\Mail\ReservationCreated;
 use App\Models\Reservation;
 use App\Models\Instrument;
+use App\Models\Category;
 use App\Models\Room;
 use Carbon\Carbon;
 use Auth;
+use DB;
 
 class ReservationController extends Controller
 {
@@ -81,14 +83,10 @@ class ReservationController extends Controller
 
     public function choose(Request $request)
     {
-        $intruments = Instrument::whereDoesntHave('reservations', function ($query) {
-            $query->whereHas('parent', function ($query) {
-                $query->where('day', session()->get('day'))
-                ->whereRaw('CAST(? AS TIME) BETWEEN from_hour AND ADDTIME(from_hour, SEC_TO_TIME((duration*3600)-1))', [session()->get('hour')]);
-            });
-        })->get();
+        $categories = Category::all();
+        $instruments = DB::select("SELECT a.id, a.name, b.id instrument_id, b.description, (b.stock - ifnull(c.en_uso, 0)) stock FROM categories a INNER JOIN instruments b ON a.id=b.category_id LEFT JOIN ( select `reservation_details`.`instrument_id`, SUM(quantity) en_uso from `reservation_details` where exists (select * from `reservations` where `reservation_details`.`reservation_id` = `reservations`.`id` and `day` = ? and CAST(? AS TIME)BETWEEN from_hour AND ADDTIME(from_hour, SEC_TO_TIME((duration*3600)-1)) and `confirmed` = true) group by `instrument_id`) c ON b.id=c.instrument_id where (b.stock - ifnull(c.en_uso, 0)) > 0 ORDER BY a.id", [session()->get('day'), session()->get('hour')]);
 
-        return view('reservations.instruments')->with('intruments', $intruments);
+        return view('reservations.instruments')->with(['categories' => $categories, 'instruments' => $instruments]);
     }
 
     public function save_instruments(Request $request)
@@ -101,6 +99,8 @@ class ReservationController extends Controller
                 $new_detail = new ReservationDetails();
                 $new_detail->reservation_id = session()->get('reservation_id');
                 $new_detail->instrument_id = $instrument;
+                $quantity = 'quantity_' . $instrument;
+                $new_detail->quantity = $request->$quantity;
 
                 $new_detail->save();
             }

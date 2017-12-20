@@ -52,6 +52,7 @@
                     <td>{{ \Carbon\Carbon::parse($reserve->day)->format('d/m/Y') }}</td>
                     <td>{{ \Carbon\Carbon::parse($reserve->from_hour)->format('h:i A') }}</tdh4>
                     <td>{{ floor($reserve->duration) }}:{{ str_pad(round(($reserve->duration - floor($reserve->duration)) * 60), 2, '0', STR_PAD_LEFT) }} horas</td>
+                </tr>
             @endforeach
             </tbody>
         </table>

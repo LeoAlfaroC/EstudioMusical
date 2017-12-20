@@ -13,7 +13,7 @@
 		</div>
 		@endif
 		<h1>Intrumentos disponibles</h1>
-			@if($intruments->isEmpty())
+			@if(count($instruments) == 0)
 				No hay intrumentos disponibles :(
 			@else
 			<form action="{{ route('reserve_save_instruments') }}" method="POST" id="form_instuments">
@@ -22,22 +22,36 @@
 			<table class="table">
 			<tbody>
 				<thead>
-					<th>ID</th>
 					<th>Descripción</th>
+					<th>Disponibilidad</th>
 					<th>Reservar</th>
 				</thead>
-				@foreach($intruments as $instrument)
+				@foreach($categories as $category)
 				<tr>
-					<td>
-						{{ $instrument->id }}
+					<td colspan="3">
+						<h4>{{ $category->name }}</h4>
 					</td>
+				</tr>
+
+				@foreach($instruments as $instrument)
+				@if($instrument->id == $category->id)
+				<tr>
 					<td>
 						{{ $instrument->description }}
 					</td>
 					<td>
-						<input type="checkbox" name="instruments[]" value="{{ $instrument->id }}" form="form_instuments" />					
+						{{ $instrument->stock }} unidades
+					</td>
+					<td>
+						<input type="checkbox" name="instruments[]" value="{{ $instrument->instrument_id }}" form="form_instuments" />			
+
+						<label for="duration">Cantidad:</label>
+						<input type="number" id="duration" name="quantity_{{ $instrument->instrument_id }}" value="1" step="1" min="1" max="{{ $instrument->stock }}" form="form_instuments">
+
 					</td>
 				</tr>
+				@endif
+				@endforeach
 				@endforeach
 			</tbody>
 			</table>
