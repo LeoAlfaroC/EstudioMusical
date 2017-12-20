@@ -9,7 +9,7 @@
 					<h1 class="media-heading text-center">{{ $instrument->description }}</h1>
 					<br />
 					<a href="#">
-					<img class="media-object img-thumbnail" src="http://lorempixel.com/750/200" alt="Filler Image By LoremPixel.com">
+					<img class="media-object img-thumbnail" src="{{ asset('storage/instruments/' . $instrument->image_path) }}" alt="{{ $instrument->description }}"  style="max-width: 750px; max-height:600px; margin: auto;">
 					</a>
 					<br />
 

@@ -4,12 +4,22 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
+		@if ($errors->any())
+			<div class="alert alert-danger">
+				Encontramos los siguientes inconvenientes con los datos que ingresaste:
+				<ul>
+					@foreach ($errors->all() as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+				</ul>
+			</div>
+		@endif
 		 @if(session('reserve_saved'))
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-			Tu reserva se registró correctamente. A continuación, elige los instrumentos que necesitarás.
+			Ya casi terminamos. A continuación, elige los instrumentos que necesitarás.
 		</div>
 		@endif
 		<h1>Intrumentos disponibles</h1>

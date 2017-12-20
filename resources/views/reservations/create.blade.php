@@ -7,6 +7,17 @@
 			<div class="alert alert-info">
 				Nuestros estudios están disponibles desde las {{ env('OPENING_TIME') }} hasta las {{ env('CLOSING_TIME') }} horas.
 			</div>
+		
+			@if ($errors->any())
+				<div class="alert alert-danger">
+					Encontramos los siguientes inconvenientes con los datos que ingresaste:
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+			@endif
 		</div>
 	</div>
 	<div class="row">

@@ -23,6 +23,11 @@ class ReservationController extends Controller
 
     public function search(Request $request)
     {
+        $request->validate([
+            'day' => 'required|date_format:Y-m-d|after:-1 day',
+            'hour' => 'required|date_format:H:i',
+        ]);
+
         session(['day' => $request->day]);
         session(['hour' => $request->hour]);
 
@@ -65,6 +70,28 @@ class ReservationController extends Controller
 
     public function save(Request $request)
     {
+        // TO-DO find a better way to avoid repeating code
+        $room = Room::find($request->room_id)->with(['reservations' => function ($query) use ($request) {
+                        $query->where('day', '=', $request->day)
+                            ->whereRaw('CAST(? AS TIME) < ADDTIME(from_hour, SEC_TO_TIME((duration*3600)-1))', [$request->hour])
+                            ->orderBy('day')
+                            ->orderBy('from_hour')
+                            ->first();
+                    }])->first();
+        
+        if($room->reservations->count() == 0)
+            $max_hours = \Carbon\Carbon::parse(env('CLOSING_TIME'));
+        else
+            $max_hours = \Carbon\Carbon::parse($room->reservations[0]->from_hour);
+
+        $max_hours = $max_hours->subHours(Carbon::parse(session()->get('hour'))->format('H'))->subMinutes(Carbon::parse(session()->get('hour'))->format('i'));
+        $max_hours = $max_hours->hour + round($max_hours->minute / 60, 2);
+
+        $request->validate([
+            'room_id' => 'required|exists:rooms,id',
+            'duration' => 'required|numeric|min:0.5|max:' . $max_hours,
+        ]);
+
         $new_reservation = new Reservation();
 
         $new_reservation->user_id = Auth::check() ? Auth::user()->id : null;
@@ -93,17 +120,23 @@ class ReservationController extends Controller
     {
         if(session()->has('reservation_id'))
         {
-            // TO-DO: Put inside transaction
-            foreach($request->instruments as $instrument)
-            {
-                $new_detail = new ReservationDetails();
-                $new_detail->reservation_id = session()->get('reservation_id');
-                $new_detail->instrument_id = $instrument;
-                $quantity = 'quantity_' . $instrument;
-                $new_detail->quantity = $request->$quantity;
+            $request->validate([
+                'instruments' => 'required|array|min:1',
+                'instruments.*' => 'exists:instruments,id',
+            ]);
 
-                $new_detail->save();
-            }
+            DB::transaction(function () use($request) {
+                foreach($request->instruments as $instrument)
+                {
+                    $new_detail = new ReservationDetails();
+                    $new_detail->reservation_id = session()->get('reservation_id');
+                    $new_detail->instrument_id = $instrument;
+                    $quantity = 'quantity_' . $instrument;
+                    $new_detail->quantity = $request->$quantity;
+
+                    $new_detail->save();
+                }
+            });
         }
    
         return redirect(route('reserve_complete'));

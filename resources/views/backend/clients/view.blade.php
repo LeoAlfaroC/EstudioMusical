@@ -7,13 +7,12 @@
 			<div class="media">
 				<div class="media-left">
 					<a href="#">
-					<img class="media-object img-thumbnail" src="http://lorempixel.com/200/200" alt="Filler Image By LoremPixel.com">
+					<img class="media-object img-thumbnail" src="http://lorempixel.com/200/200/people" alt="Filler Image By LoremPixel.com">
 					</a>
 				</div>
 				<div class="media-body">
 					<h1 class="media-heading">{{ $client->name }}</h1>
 					<br />
-					
 					<p><strong>Email:</strong> {{ $client->email }}</p>
 					<p><strong>Teléfono:</strong> {{ $client->phone }}</p>
 					<p><strong>Miembro desde:</strong> {{ \Carbon\Carbon::parse($client->created_at)->format('d/m/Y') }}</p>
